@@ -1,4 +1,6 @@
 beathoven
 =========
 
-Optical music recognition
+Optical music recognition by Students at Linköpings University in Matlab.
+
+
