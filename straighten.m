@@ -10,13 +10,18 @@ function [ outputImage ] = straighten( inputImage )
     P  = houghpeaks(H,1);
     
     % Pick out the angle
-    angle = T(P(2));
+    angle = T(P(2)) + 90;
 
+    if (angle > 90)
+           angle = angle - 180;
+    end
+   
+    
     %Rotate the image
     %Taken from http://www.mathworks.com/matlabcentral/answers/10089-image-rotate
     %In order to have white on the borders
-    outputImage = imrotate(inputImage, 90+angle);
-    Mrot = ~imrotate(true(size(inputImage)),90+angle);
+    outputImage = imrotate(inputImage, angle);
+    Mrot = ~imrotate(true(size(inputImage)),angle);
     outputImage(Mrot&~imclearborder(Mrot)) = 1;
 end
 
