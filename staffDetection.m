@@ -11,8 +11,17 @@ function staffs = staffDetection(BWimg)
     threshHist = zeros(size(horHist));
     for i = 1:size(indices,1)
         group = horHist(indices(i,1):indices(i,2));
+        
         threshold = graythresh(group);
-        staffGroup = im2bw(group, threshold);
+        group = im2bw(group, threshold);
+        
+        
+        [~, locations] = findpeaks(im2double(group), 'MINPEAKDISTANCE', 3);
+        
+        staffGroup = zeros(size(group));
+        staffGroup(locations) = group(locations);
+        sum(staffGroup == 1)
+        
         if sum(staffGroup == 1) >= 5
             threshHist(indices(i,1):indices(i,2)) = staffGroup;
         end
