@@ -7,7 +7,6 @@ function staffs = staffDetection(BWimg)
     edgeArray = diff([0; (horHist(:) ~= 0); 0]);    
     indices = [find(edgeArray > 0) find(edgeArray <0)-1];
     
-    
     threshHist = zeros(size(horHist));
     for i = 1:size(indices,1)
         group = horHist(indices(i,1):indices(i,2));
@@ -20,7 +19,7 @@ function staffs = staffDetection(BWimg)
         
         staffGroup = zeros(size(group));
         staffGroup(locations) = group(locations);
-        sum(staffGroup == 1)
+        
         
         if sum(staffGroup == 1) >= 5
             threshHist(indices(i,1):indices(i,2)) = staffGroup;
