@@ -4,7 +4,7 @@ function [ outputImage ] = straighten( inputImage )
     BW = edge(I, 'canny');
 
     % Hough transform, with more detailed resolution than before.
-    [H,T,R] = hough(BW,'Theta',-90:0.01:89.5);
+    [H,T,R] = hough(BW,'Theta',-90:0.1:89.5);
     
     % Get only the first houghpeak
     P  = houghpeaks(H,1);
