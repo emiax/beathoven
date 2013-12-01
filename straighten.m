@@ -15,13 +15,8 @@ function [ outputImage ] = straighten( inputImage )
     if (angle > 90)
            angle = angle - 180;
     end
-   
     
-    %Rotate the image
-    %Taken from http://www.mathworks.com/matlabcentral/answers/10089-image-rotate
-    %In order to have white on the borders
-    outputImage = imrotate(inputImage, angle);
-    Mrot = ~imrotate(true(size(inputImage)),angle);
-    outputImage(Mrot&~imclearborder(Mrot)) = 1;
+    inputImage = 1-inputImage;
+    outputImage = 1-imrotate(inputImage, angle, 'bilinear');
 end
 
