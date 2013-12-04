@@ -1,4 +1,4 @@
-function outputImage = staffRemoval(image, staffs)
+function outputImage = lineRemoval(image, staffs)
     outputImage = double(image);
     yCoordinates = staffs(:)';
     [h, w] = size(image);
