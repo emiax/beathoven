@@ -8,8 +8,8 @@ function staffs = staffDetection(input)
     derivative = imfilter(input,f,'circular');
     
     %Projects everything on the horizontal plane
-    projectedDerivative = sum(derivative, 2)/sum(size(derivative));
-    projectedInput = sum(input == 0, 2)/sum(size(input));
+    projectedDerivative = horProj(derivative);
+    projectedInput = horProj(input == 0);
     
     linePoints = max(projectedInput-10*projectedDerivative, 0);
     [peaks, locations] = findpeaks(linePoints, 'MINPEAKDISTANCE', 2);
