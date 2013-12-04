@@ -25,8 +25,8 @@ function outputImage = lineRemoval(image, staffs)
         relevant = toBottom(toBottom>0);
         toBottom = median(relevant);
         
-        size(y:y+toBottom)
-        size(y+toBottom:y+2*toBottom)
+        %size(y:y+toBottom)
+        %size(y+toBottom:y+2*toBottom)
         
         outputImage(y+1:y+toBottom, :) = 1; %image(y+1+toBottom:y+2*toBottom, :);
         outputImage(y-toTop:y, :) = 1; %image(y-2*toTop, y-toTop, :);
@@ -34,11 +34,10 @@ function outputImage = lineRemoval(image, staffs)
     end
     %outputImage = image;
     
-    ones(toTop + toBottom - 1, 1)
     outputImage = max(image, imerode(outputImage, ones(2*(toTop + toBottom), 1)));
     
-    figure
-    imshow(image);
-    figure
-    imshow(outputImage);
+    %figure
+    %imshow(image);
+    %figure
+    %imshow(outputImage);
 end
