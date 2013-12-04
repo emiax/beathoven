@@ -1,6 +1,8 @@
 clear all;
 close all;
 images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
+%images = {'im1s'};
+
 path = 'samples/';
 suffix = '.jpg';
 numImages = size(images,1);
@@ -41,9 +43,11 @@ for i = 1:numImages
     figure(h3);
     c = subplot(numGrid, numGrid, i);
     imshow(imgThresh);
+    hold on;
     title(c, fileString);
     %Gets the staffs
-    %staffDetection(imgThresh);
-    
-    
+    staffs = staffDetection(imgThresh);
+    for y = staffs(:)
+        plot([0, 1000], [y y], 'r');
+    end
 end
