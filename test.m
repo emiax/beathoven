@@ -39,15 +39,23 @@ for i = 1:numImages
     %Threshold the image
     imgThresh = thresh(straightened);
     
-   
-    figure(h3);
-    c = subplot(numGrid, numGrid, i);
-    imshow(imgThresh);
-    hold on;
-    title(c, fileString);
+    %Uncomment to view lines
+    %figure(h3);
+    %c = subplot(numGrid, numGrid, i);
+    %imshow(imgThresh);
+    %hold on;
+    %title(c, fileString);
     %Gets the staffs
-    staffs = staffDetection(imgThresh);
-    for y = staffs(:)
-        plot([0, 1000], [y y], 'r');
-    end
+    %lines = staffDetection(imgThresh);
+    %for y = lines(:)
+    %    plot([0, 1000], [y y], 'r');
+    %end
+    
+    %Uncomment to see staffs seperated
+    %staffBounds = staffBox(lines, imgThresh);
+    %for j = 1:size(lines,1)        
+    %    figure()
+    %    imshow(imgThresh(staffBounds(j,1):staffBounds(j,2),:))
+    %end
+    
 end
