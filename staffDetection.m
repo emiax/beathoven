@@ -5,7 +5,7 @@ function staffs = staffDetection(input)
     input = bwmorph(input,'erode');
 
     f = [-1 0 1];
-    derivative = imfilter(input,f,'circular');
+    derivative = abs(imfilter(input,f,'circular'));
     
     %Projects everything on the horizontal plane
     projectedDerivative = horProj(derivative);
