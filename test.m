@@ -1,7 +1,7 @@
 clear all;
 close all;
-images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
-%images = {'im1s'};
+%images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
+images = {'im6s'};
 
 path = 'samples/';
 suffix = '.jpg';
@@ -78,6 +78,10 @@ for i = 1:numImages
   %  for y = lines(:)
   %      plot([0, 1000], [y y], 'r');
   %  end
-    
+    figure()
+    imshow(imgNoLines);
+    %imgNoLines = thresh(imgNoLines);
+  
+    noteDetection(imgNoLines, staffBounds, lines);
     
 end
