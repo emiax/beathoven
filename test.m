@@ -14,6 +14,8 @@ h2 = figure(2);
 set(2, 'name', 'Straightened');
 h3 = figure(3);
 set(3, 'name', 'Threshold');
+h4 = figure(4);
+set(4, 'name', 'No lines');
 
 
 for i = 1:numImages
@@ -46,7 +48,9 @@ for i = 1:numImages
     %hold on;
     %title(c, fileString);
     %Gets the staffs
-    %lines = staffDetection(imgThresh);
+    lines = staffDetection(imgThresh);
+    
+    imgThresh = horizontalCrop(imgThresh, lines);
     %for y = lines(:)
     %    plot([0, 1000], [y y], 'r');
     %end
@@ -57,5 +61,22 @@ for i = 1:numImages
     %    figure()
     %    imshow(imgThresh(staffBounds(j,1):staffBounds(j,2),:))
     %end
+    
+        %Plot for debugging purposes:
+    
+    
+    
+    
+    imgNoLines = lineRemoval(straightened, lines);
+    figure(h4);
+    b = subplot(numGrid, numGrid, i);
+    imshow(imgNoLines);
+    title(b, fileString);
+   % hold on;
+    % 
+  %  for y = lines(:)
+  %      plot([0, 1000], [y y], 'r');
+  %  end
+    
     
 end
