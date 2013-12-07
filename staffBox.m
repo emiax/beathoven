@@ -1,4 +1,4 @@
-function [ staffBounds ] = staffBox( lines , BWimg)
+function [ staffBounds ] = staffBox( BWimg , lines)
     horHist = horProj(BWimg == 0);
     numStaffs = size(lines,1);
     staffBounds = zeros(numStaffs,2);

@@ -22,7 +22,7 @@ function outputImage = lineRemoval(image, staffs)
     onlyLines = double(im2bw(onlyLines, graythresh(onlyLines)));
     onlyLines = imreconstruct(lineSeeds, onlyLines);
     
-    imshow(onlyLines/max(max(onlyLines)));
+    %imshow(onlyLines/max(max(onlyLines)));
     
     distances = zeros(size(image));
     
