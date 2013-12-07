@@ -2,6 +2,8 @@
 
 function staffs = staffDetection(input)
     
+    [h, w] = size(input); 
+
     input = bwmorph(input,'erode');
 
     f = [-1 0 1];
@@ -11,10 +13,15 @@ function staffs = staffDetection(input)
     projectedDerivative = horProj(derivative);
     projectedInput = horProj(input == 0);
     
+    
+    
     linePoints = max(projectedInput-10*projectedDerivative, 0);
-    [peaks, locations] = findpeaks(linePoints, 'MINPEAKDISTANCE', 2);
+    figure(); plot(linePoints);
+    
+    [peaks, locations] = findpeaks(linePoints, 'MINPEAKHEIGHT', 0.1, 'MINPEAKDISTANCE', 2);
     
     
+   
     %iterate over possible upper lines
     first = 1;
     last = length(locations) - 4;
@@ -28,6 +35,7 @@ function staffs = staffDetection(input)
         
         % calculate product of all five line points
         weights(i) = prod(peaks(i:i+4));
+        
         
         
         
@@ -51,10 +59,17 @@ function staffs = staffDetection(input)
         end
     end
     
+    
+    
     %staffs
     %Plot for debugging purposes:
     %figure; hold on;
     %imshow(input);
+    %locations
+    %for y = locations(:)
+    %    plot([0, 1000], [y y], 'b');
+    %end
+    % 
     %for y = staffs(:)
     %    plot([0, 1000], [y y], 'r');
     %end

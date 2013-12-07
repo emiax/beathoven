@@ -1,69 +1,109 @@
 function outputImage = lineRemoval(image, staffs)
-
-
-
-    image = ~image;
+    outputImage = 1 - image;
+    image = rgb2gray(1 - image);
+    dimage = image;
+    lines = image;
     
-    figure(); imshow(image);
-    lines = double(image);
     
-    outputImage = double(image);
-    yCoordinates = staffs(:)';
+    yCoordinates = staffs(:)'; % all staff lines, no matter which of the five different ones.
+    lineDist = mean(mean(staffs(:,2:5) - staffs(:, 1:4)));
+    
+    staffs
+    
+    lineSeeds = zeros(size(image));
+    for y = yCoordinates
+        lineSeeds(y,:) = 1;
+    end
+        
+    lineSeeds = imdilate(lineSeeds, ones(3, 3));
+    
+    theFilter = fspecial('gaussian', [1 ceil(8*lineDist)], 2*lineDist);
+    onlyLines = imfilter(image, theFilter);
+    onlyLines = double(im2bw(onlyLines, graythresh(onlyLines)));
+    onlyLines = imreconstruct(lineSeeds, onlyLines);
+    
+    imshow(onlyLines/max(max(onlyLines)));
+    
+    distances = zeros(size(image));
+    
+        outputImage(:, :, 2) = 0;
+        outputImage(:, :, 3) = 0;    
+    
     [h, w] = size(image);
+    
+    
+    
+    lineMask = zeros(size(image));
     for y = yCoordinates
         toTop = zeros(1, w);
         toBottom = zeros(1, w);
         
         for x = 1:w
             i = 0;   
-            while (image(y - i, x) == 1) 
+            while (onlyLines(y - i, x) == 1) 
                 i = i + 1;
             end
-            toTop(x) = i;
+            toTop(x) = min(i, lineDist/3);
+            
             
             i = 0;   
-            while (image(y + i, x) == 1) 
+            while (onlyLines(y + i, x) == 1) 
                 i = i + 1;
             end
-            toBottom(x) = i;
+            toBottom(x) = min(i, lineDist/3);
+            distances(y, x) = min(toTop(x), toBottom(x));
         end
-        
-        relevant = toTop;%(toTop>0);
-        toTop = median(relevant) + 1;
-        relevant = toBottom;%(toBottom>0);
-        toBottom = median(relevant) + 1;
-        
-        %size(y:y+toBottom)
-        %size(y+toBottom:y+2*toBottom)
-        
-        
-        %over = image(y+toBottom, :)
-        %(x') * ones(1,3)
-        %size((image(y+toBottom + 2, :)*ones(toBottom+1, 1))')
-        %size(outputImage(y:y+toBottom, :))
-        %outputImage(y:y+toBottom, :) = (image(y+toBottom + 2, :)'*ones(toBottom+1, 1))';
-      
-        %outputImage(y:y-toTop-1, :) = image(y-toTop - 2, :);
-        
-        for yi = y-toTop:y+toBottom
-            lines(yi, :) = 0.5;
-            outputImage(yi, :) = image(y + toBottom + 1, :) + image(y - toTop - 1, :) > 1;
-        end
-        
-        
-        
-        
-        ; %image(y+1+toBottom:y+2*toBottom, :);
-        %lines(y+toBottom-1:y, :) = 1; 
-        %lines(y-toTop+1:y, :) = 1; %image(y-2*toTop, y-toTop, :);
-        
-    end
+       
     
-    outputImage = imerode(outputImage, [1 1 1]');
-    outputImage = imdilate(outputImage, [1 1 1]');
+        relevant = toTop(toTop>0);
+        toTop = mean(relevant);
+        relevant = toBottom(toBottom>0);
+        toBottom = mean(relevant);
+        
+        if isnan(toTop)
+            toTop = 0;
+        end
+        if isnan(toBottom)
+            toBottom = 0;
+        end
+        
+        lineHeight = toTop + toBottom;
+               
+        toTop = round(toTop);
+        toBottom = round(toBottom);
+                
+        ymin = y-toTop;
+        ymax = y+toBottom;
+
+        for yi = ymin:ymax
+            
+            t = (yi - ymin) / (ymax - ymin);
+            line = dimage(ymax + 1, :).*t + dimage(ymin - 1, :).*(1-t);
+            lines(yi, :) = line;
+            outputImage(yi, :, 1) = line;
+            outputImage(yi, :, 2) = line;
+            lineMask(yi, :) = 1;
+        end
+        
+        st = ones(ceil(lineHeight), 1);
+        new = imerode(image, st);
+        old = zeros(size(image));
+        
+        while new ~= old
+            old = new;
+            new = imdilate(old, st);
+        end
+        
+        outputImage = new;
+
+    end
+
+    
+    %outputImage = imerode(outputImage, [1 1 1 1 1]');
+    %outputImage = imdilate(outputImage, [1 1 1 1 1]');
     %outputImage = bwmorph(outputImage, 'open');
     
-    figure(); imshow(lines);
+    %figure(); imshow(lines);
     %outputImage = image;
     
     %se = ones((toTop + toBottom), 1);
