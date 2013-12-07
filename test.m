@@ -46,13 +46,14 @@ for i = 1:numImages
     %hold on;
     %title(c, fileString);
     %Gets the staffs
-    %lines = staffDetection(imgThresh);
+    lines = staffDetection(imgThresh);
     %for y = lines(:)
     %    plot([0, 1000], [y y], 'r');
     %end
     
     %Uncomment to see staffs seperated
-    %staffBounds = staffBox(lines, imgThresh);
+    staffBounds = staffBox(imgThresh, lines);
+    imgNoLines = lineRemoval(imgThresh, lines);
     %for j = 1:size(lines,1)        
     %    figure()
     %    imshow(imgThresh(staffBounds(j,1):staffBounds(j,2),:))
