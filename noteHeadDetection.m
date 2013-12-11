@@ -1,7 +1,7 @@
-function [ noteHeads ] = noteHeadDetection( imgNoLines, staffBounds , lines)
+function [ noteHeads ] = noteHeadDetection( imgNoLines, lines)
 
-
-    imgNoLines =  (double(imgNoLines) ./ max(max(max(double(imgNoLines)))));
+    
+    imgNoLines =  1 - (double(imgNoLines) ./ max(max(max(double(imgNoLines)))));
 
 
     lineDist = floor(mean(mean(lines(:,2:5) - lines(:, 1:4))));
@@ -21,6 +21,7 @@ function [ noteHeads ] = noteHeadDetection( imgNoLines, staffBounds , lines)
     correlation = imopen(imgNoLines, round(str));
 
     
-    noteHeads = correlation./max(max(double(correlation)));
+    noteHeads = (correlation./max(max(double(correlation)))) - 1;
+    
 end
 
