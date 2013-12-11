@@ -96,7 +96,7 @@ function outputImage = lineRemoval(image, staffs)
 
     end
 
-    
+    outputImage = 1-outputImage;
     %outputImage = imerode(outputImage, [1 1 1 1 1]');
     %outputImage = imdilate(outputImage, [1 1 1 1 1]');
     %outputImage = bwmorph(outputImage, 'open');

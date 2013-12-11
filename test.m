@@ -16,6 +16,9 @@ h3 = figure(3);
 set(3, 'name', 'Threshold');
 h4 = figure(4);
 set(4, 'name', 'No lines');
+h5 = figure(5);
+set(5, 'name', 'No lines');
+
 
 
 for i = 1:numImages
@@ -68,20 +71,30 @@ for i = 1:numImages
     
     
     
-    imgNoLines = lineRemoval(straightened, lines);
+    noLines = lineRemoval(straightened, lines);
     figure(h4);
     b = subplot(numGrid, numGrid, i);
-    imshow(imgNoLines);
+    imshow(noLines);
     title(b, fileString);
+    
+    
+    stemsImage = stemDetection(noLines, lines);
+    figure(h5);
+    b = subplot(numGrid, numGrid, i);
+    imshow(stemsImage);
+    title(b, fileString);
+    
+    
+   
    % hold on;
     % 
   %  for y = lines(:)
   %      plot([0, 1000], [y y], 'r');
   %  end
     figure()
-    imshow(imgNoLines);
+    %imshow(noLines);
     %imgNoLines = thresh(imgNoLines);
   
-    noteDetection(imgNoLines, staffBounds, lines);
+    noteDetection(noLines, staffBounds, lines);
     
 end
