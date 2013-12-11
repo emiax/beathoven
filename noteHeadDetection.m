@@ -14,14 +14,14 @@ function [ noteHeads ] = noteHeadDetection( imgNoLines, staffBounds , lines)
     str = imresize(str, 'Scale', [1,1.2]);
     str = imrotate(str, 45, 'bilinear');
 
-    staff = imgNoLines(staffBounds(i,1):staffBounds(i,2),:);
     %bwImg = thresh(staff);  
     %morphed = bwmorph(bwImg, 'clean', Inf);
     %closed = imfill(staff);
 
-    correlation = imopen(staff, round(str));
+    correlation = imopen(imgNoLines, round(str));
 
+    
     noteHeads = correlation./max(max(double(correlation)));
-
+    imshow(noteHeads);
 end
 
