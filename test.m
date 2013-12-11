@@ -68,11 +68,17 @@ for i = 1:numImages
     
     
     
-    imgNoLines = lineRemoval(straightened, lines);
+    noLines = lineRemoval(straightened, lines);
     figure(h4);
     b = subplot(numGrid, numGrid, i);
-    imshow(imgNoLines);
+    imshow(noLines);
     title(b, fileString);
+    
+    
+    findStems(noLines, lines);
+    
+    
+   
    % hold on;
     % 
   %  for y = lines(:)
