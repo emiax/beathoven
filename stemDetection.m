@@ -17,6 +17,6 @@ function stemsImage = findStems(noLinesImage, lines)
     %figure();
     %imshow(image);
     
-    stemsImage = 1 - noLinesImage;
+    stemsImage = 1 - opened;
     
 end

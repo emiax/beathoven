@@ -17,7 +17,7 @@ set(3, 'name', 'Threshold');
 h4 = figure(4);
 set(4, 'name', 'No lines');
 h5 = figure(5);
-set(5, 'name', 'No lines');
+set(5, 'name', 'Stems, flags, heads');
 
 
 
@@ -79,9 +79,17 @@ for i = 1:numImages
     
     
     stemsImage = stemDetection(noLines, lines);
+    headsImage = noteHeadDetection(noLines, staffBounds, lines);
+    
+    [h, w] = size(stemsImage);
+    categorization = zeros(h, w, 3);
+    categorization(:, :, 1) = stemsImage;
+    categorization(:, :, 2) = headsImage;
+    
+    
     figure(h5);
     b = subplot(numGrid, numGrid, i);
-    imshow(stemsImage);
+    imshow(categorization);
     title(b, fileString);
     
     
@@ -91,10 +99,9 @@ for i = 1:numImages
   %  for y = lines(:)
   %      plot([0, 1000], [y y], 'r');
   %  end
-    figure()
     %imshow(noLines);
     %imgNoLines = thresh(imgNoLines);
   
-    noteDetection(noLines, staffBounds, lines);
+    
     
 end
