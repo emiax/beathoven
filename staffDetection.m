@@ -16,7 +16,7 @@ function staffs = staffDetection(input)
     
     
     linePoints = max(projectedInput-10*projectedDerivative, 0);
-    figure(); plot(linePoints);
+    %figure(); plot(linePoints);
     
     [peaks, locations] = findpeaks(linePoints, 'MINPEAKHEIGHT', 0.1, 'MINPEAKDISTANCE', 2);
     
