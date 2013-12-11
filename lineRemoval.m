@@ -8,8 +8,6 @@ function outputImage = lineRemoval(image, staffs)
     yCoordinates = staffs(:)'; % all staff lines, no matter which of the five different ones.
     lineDist = mean(mean(staffs(:,2:5) - staffs(:, 1:4)));
     
-    staffs
-    
     lineSeeds = zeros(size(image));
     for y = yCoordinates
         lineSeeds(y,:) = 1;
