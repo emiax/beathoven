@@ -22,6 +22,5 @@ function [ noteHeads ] = noteHeadDetection( imgNoLines, staffBounds , lines)
 
     
     noteHeads = correlation./max(max(double(correlation)));
-    imshow(noteHeads);
 end
 
