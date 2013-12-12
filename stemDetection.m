@@ -5,7 +5,7 @@ function stemsImage = findStems(noLinesImage, lines)
     noLinesImage = 1 - noLinesImage;
 
     lineDist = mean(mean(lines(:,2:5) - lines(:, 1:4)));
-    opened = imopen(noLinesImage, ones(2*lineDist, 1)); 
+    opened = imopen(noLinesImage, ones(round(2.2*lineDist), 1)); 
         
     %[h, w] = size(noLinesImage);
     %image = zeros(h, w, 3);

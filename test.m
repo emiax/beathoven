@@ -1,7 +1,9 @@
 clear all;
 close all;
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
-images = {'im6s'};
+%images = {'im1s';'im3s'; 'im5s'; 'im6s'};
+
+images = {'im1s'}
 
 path = 'samples/';
 suffix = '.jpg';
@@ -77,20 +79,15 @@ for i = 1:numImages
     imshow(noLines);
     title(b, fileString);
     
+
+    [stems, heads, misc] = categorize(noLines, lines);
     
-    stemsImage = stemDetection(noLines, lines);
-    headsImage = noteHeadDetection(noLines, staffBounds, lines);
-    
-    [h, w] = size(stemsImage);
-    categorization = zeros(h, w, 3);
-    categorization(:, :, 1) = stemsImage;
-    categorization(:, :, 2) = headsImage;
+    [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
+   
     
     
-    figure(h5);
-    b = subplot(numGrid, numGrid, i);
-    imshow(categorization);
-    title(b, fileString);
+    
+    %title(b, fileString);
     
     
    
