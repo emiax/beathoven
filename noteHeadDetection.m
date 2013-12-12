@@ -2,7 +2,7 @@ function [ noteHeads ] = noteHeadDetection( imgNoLines, lines)
 
     
     imgNoLines =  1 - (double(imgNoLines) ./ max(max(max(double(imgNoLines)))));
-
+    [h,w] = size(imgNoLines);   
 
     lineDist = floor(mean(mean(lines(:,2:5) - lines(:, 1:4))));
 
@@ -21,7 +21,13 @@ function [ noteHeads ] = noteHeadDetection( imgNoLines, lines)
     correlation = imopen(imgNoLines, round(str));
 
     
-    noteHeads = (correlation./max(max(double(correlation)))) - 1;
+    noteHeads = 1 - (correlation./max(max(double(correlation))));
+    
+    %debugImage = zeros(zeros(h,w,3));
+    %debugImage(:,:,3) = noteHeads;
+    %debugImage(:,:,2) = imgNoLines;
+    %figure();
+    %imshow(debugImage);
     
 end
 
