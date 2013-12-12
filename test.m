@@ -1,7 +1,9 @@
 clear all;
 close all;
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
-images = {'im6s'};
+%images = {'im1s';'im3s'; 'im5s'; 'im6s'};
+
+images = {'im1s'}
 
 path = 'samples/';
 suffix = '.jpg';
@@ -17,7 +19,7 @@ set(3, 'name', 'Threshold');
 h4 = figure(4);
 set(4, 'name', 'No lines');
 h5 = figure(5);
-set(5, 'name', 'No lines');
+set(5, 'name', 'Stems, flags, heads');
 
 
 
@@ -77,12 +79,15 @@ for i = 1:numImages
     imshow(noLines);
     title(b, fileString);
     
+
+    [stems, heads, misc] = categorize(noLines, lines);
     
-    stemsImage = stemDetection(noLines, lines);
-    figure(h5);
-    b = subplot(numGrid, numGrid, i);
-    imshow(stemsImage);
-    title(b, fileString);
+    [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
+   
+    
+    
+    
+    %title(b, fileString);
     
     
    
@@ -91,10 +96,9 @@ for i = 1:numImages
   %  for y = lines(:)
   %      plot([0, 1000], [y y], 'r');
   %  end
-    figure()
     %imshow(noLines);
     %imgNoLines = thresh(imgNoLines);
   
-    noteDetection(noLines, staffBounds, lines);
+    
     
 end
