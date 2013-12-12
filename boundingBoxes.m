@@ -48,17 +48,19 @@ function [boxes, headCentroids] = boundingBoxes(stems, heads, lineDist)
 
     
     % uncomment for debugging
-    figure();
-    imshow(categorization); hold on;
-    for i = 1:nBoxes
-        rectangle('Position', boxes(i, :), 'EdgeColor','r');
-        [nHeads, ~] = size(headCentroids{i});
-        nHeads
-        for j = 1:nHeads
-            headCentroids{i}(j, :)
-            plot(headCentroids{i}(j, :),'g.');
-        end
-    end
+%     figure();
+%     imshow(categorization); hold on;
+%     for i = 1:nBoxes
+%         rectangle('Position', boxes(i, :), 'EdgeColor','r');
+%         [nHeads, ~] = size(headCentroids{i});
+%         nHeads
+%         for j = 1:nHeads
+%             headCentroids{i}(j, :)
+%             x = headCentroids{i}(j, 1);
+%             y = headCentroids{i}(j, 2);
+%             plot(x, y,'g.');
+%         end
+%     end
 %         
 %     
 %
