@@ -102,10 +102,33 @@ for i = 1:numImages
     title(b, fileString);
     
 
-    [stems, heads, misc] = categorize(noLines, lines);
+    staffs = staffBox(imgThresh, lines);
+    [nStaffs, ~] = size(staffs);
     
-    [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
+    p = '';
+    
+    for i = 1:nStaffs 
+        
+        staffImg = noLines(staffs(i, 1):staffs(i, 2),:);
+        [stems, heads, misc] = categorize(staffImg, lines);
+        [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
+        
+        topLine = lines(i, 1) - staffs(i, 1)
+        bottomLine = lines(i, 5) - staffs(i, 1)
+        
+        [nBoxes, ~] = size(boxes);
+        for i = 1:nBoxes
+            [nHeads, ~] = size(heads{i});
+            for j = 1:nHeads
+                %x = headCentroids{i}(j, 1);
+                y = heads{i}(j, 2);
+                p = strcat(p, pitch(y, topLine, bottomLine));
+            end
+        end
+        p = strcat(p, 'n');
+    end
    
+    p
     
     
     
