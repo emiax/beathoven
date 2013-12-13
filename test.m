@@ -86,13 +86,13 @@ for i = 1:numImages
     p = '';
     
     for i = 1:nStaffs 
-        
+
         staffImg = noLines(staffs(i, 1):staffs(i, 2),:);
         [stems, heads, misc] = categorize(staffImg, lines);
         [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
         
-        topLine = lines(i, 1) - staffs(i, 1)
-        bottomLine = lines(i, 5) - staffs(i, 1)
+        topLine = lines(i, 1) - staffs(i, 1);
+        bottomLine = lines(i, 5) - staffs(i, 1);
         
         [nBoxes, ~] = size(boxes);
         for i = 1:nBoxes
