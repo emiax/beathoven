@@ -3,7 +3,7 @@ close all;
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'};
 
-images = {'im1s'}
+images = {'im13s'};
 
 path = 'samples/';
 suffix = '.jpg';
@@ -85,21 +85,21 @@ for i = 1:numImages
     
     p = '';
     
-    for i = 1:nStaffs 
+    for j = 1:nStaffs 
         
-        staffImg = noLines(staffs(i, 1):staffs(i, 2),:);
+        staffImg = noLines(staffs(j, 1):staffs(j, 2),:);
         [stems, heads, misc] = categorize(staffImg, lines);
         [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
         
-        topLine = lines(i, 1) - staffs(i, 1)
-        bottomLine = lines(i, 5) - staffs(i, 1)
+        topLine = lines(j, 1) - staffs(j, 1)
+        bottomLine = lines(j, 5) - staffs(j, 1)
         
         [nBoxes, ~] = size(boxes);
-        for i = 1:nBoxes
-            [nHeads, ~] = size(heads{i});
-            for j = 1:nHeads
-                %x = headCentroids{i}(j, 1);
-                y = heads{i}(j, 2);
+        for k = 1:nBoxes
+            [nHeads, ~] = size(heads{k});
+            for l = 1:nHeads
+                %x = headCentroids{k}(l, 1);
+                y = heads{k}(l, 2);
                 p = strcat(p, pitch(y, topLine, bottomLine));
             end
         end
