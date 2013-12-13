@@ -1,10 +1,10 @@
 clear all;
 close all;
 
-%images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
+images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'};
 
-images = {'im1s'};
+%images = {'im1s'};
 
 path = 'samples/';
 suffix = '.jpg';
@@ -105,31 +105,44 @@ for i = 1:numImages
     staffs = staffBox(imgThresh, lines);
     [nStaffs, ~] = size(staffs);
     
-    p = '';
-    
+    outputString = '';   
 
     for j = 1:nStaffs 
         
         staffImg = noLines(staffs(j, 1):staffs(j, 2),:);
         [stems, heads, misc] = categorize(staffImg, lines);
-        [boxes, heads] = boundingBoxes(stems, heads, lineDist(lines));
+        [boxes, heads, flagPositions] = boundingBoxes(stems, heads, lineDist(lines));
         
         topLine = lines(j, 1) - staffs(j, 1);
         bottomLine = lines(j, 5) - staffs(j, 1);
         
+        
+        
         [nBoxes, ~] = size(boxes);
+        values = noteValue(flagPositions, misc, lineDist(lines));
         for k = 1:nBoxes
             [nHeads, ~] = size(heads{k});
             for l = 1:nHeads
                 %x = headCentroids{k}(l, 1);
                 y = heads{k}(l, 2);
-                p = strcat(p, pitch(y, topLine, bottomLine));
+               
+                p = pitch(y, topLine, bottomLine);
+                value = values(k);
+                if value == 4
+                    p = upper(p);
+                elseif value ~= 8
+                    p = '';
+                end
+                
+                outputString = strcat(outputString, p);
             end
         end
-        p = strcat(p, 'n');
+        if (j ~= nStaffs)
+            outputString = strcat(outputString, 'n');
+        end
     end
    
-    p
+    outputString
     
     
     
@@ -137,8 +150,8 @@ for i = 1:numImages
 
     %Threshold the image
     imgThresh = thresh(illuminated);
-    figure();
-    imshow(imgThresh);
+    %figure();
+    %imshow(imgThresh);
     
 %     %Uncomment to view lines
 %     %figure(h3);

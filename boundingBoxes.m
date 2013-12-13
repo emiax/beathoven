@@ -36,6 +36,10 @@ function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lin
         x = max(bb(1), 1); y = max(bb(2), 1); x2 = min(x+bb(3), w); y2 = min(y+bb(4), h);
         
         
+        stemXOffset = 0;
+        [~, stemXOffset] = max(vertProj(stems(y:y2,x:x2)));
+        
+        
         localHeads = heads(y:y2,x:x2);
         headLabels = bwlabel(localHeads);
         headCentroidsStruct = regionprops(headLabels, 'Centroid', 'Area');
@@ -73,12 +77,12 @@ function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lin
         %if the majority of note head areas is at the bottom om the stem,
         % nullify the found potential heads in the bottom, and vice versa.       
         if (topArea >= bottomArea) 
-            flagPositions(i,:) = [y, y+(y2-y)/4, (x+x2)/2];
+            flagPositions(i,:) = [y+2*(y2-y)/3 - lineDist/2, y2 + lineDist/2, x + stemXOffset];
             if (~isempty(foundInBottom))
                 headCentroids{i}(foundInBottom',:) = [];
             end
         elseif (bottomArea >= topArea)
-            flagPositions(i,:) = [y+3*(y2-y)/4, y2, (x+x2)/2];
+            flagPositions(i,:) = [y - lineDist/2, y+(y2-y)/3 + lineDist/2, x + stemXOffset];
             if (~isempty(foundInTop))
                 headCentroids{i}(foundInTop',:) = [];           
             end
