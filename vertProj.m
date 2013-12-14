@@ -1,5 +1,6 @@
 function [verticalProjection] = vertProj(image)
-    verticalProjection = sum(image, 1)/sum(size(image));
+    [h, ~] = size(image);
+    verticalProjection = sum(image, 1)/h;
 end
 
 

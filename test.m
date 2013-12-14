@@ -52,9 +52,6 @@ for i = 1:numImages
     %Straighten the image
     straightened = straighten(img);
     
-    figure();
-    imshow(straightened);
-    
     
     % Show straightened image
         figure(h2);
@@ -85,6 +82,7 @@ for i = 1:numImages
     %title(c, fileString);
     %Gets the staffs
     lines = staffDetection(imgThresh);
+   
     
     imgThresh = horizontalCrop(imgThresh, lines);
 
