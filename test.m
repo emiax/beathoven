@@ -1,15 +1,19 @@
 clear all;
 close all;
 
-images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
+%images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'};
 
-%images = {'im1s'};
+images = {'im1s'};
 
 path = 'samples/';
 suffix = '.jpg';
 numImages = size(images,1);
 numGrid = ceil(sqrt(numImages));
+
+
+[referenceNames, referenceStrings] = textread(strcat(path, 'reference.txt'),'%q %q\n');
+
 
 h1 = figure(1);
 set(1, 'name', 'Original Images');
@@ -91,9 +95,7 @@ for i = 1:numImages
     %end
     
         %Plot for debugging purposes:
-    
-    
-    
+   
     
     noLines = lineRemoval(straightened, lines);
     figure(h4);
@@ -141,8 +143,17 @@ for i = 1:numImages
             outputString = strcat(outputString, 'n');
         end
     end
-   
-    outputString
+        
+    imageName = images(i);
+    referenceIndex = find(ismember(referenceNames, imageName));
+    
+    if (referenceIndex) 
+       ref = referenceStrings(referenceIndex);
+       d = strdist(char(ref), outputString);
+       failRate = double(d)/double(length(char(ref)));
+       fprintf('%s %d %#5.0f \n', char(imageName), d, failRate*100);
+       
+    end
     
     
     

@@ -103,20 +103,20 @@ function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lin
     
     
     % uncomment for debugging
-    figure();
+    %figure();
     
-    imshow(categorization); hold on;
-    for i = 1:nBoxes
-        rectangle('Position', boxes(i, :), 'EdgeColor','r');
-        [nHeads, ~] = size(headCentroids{i});
-        
-        for j = 1:nHeads
-            
-            x = headCentroids{i}(j, 1);
-            y = headCentroids{i}(j, 2);
-            plot(x, y,'g.');
-        end
-    end
+    %imshow(categorization); hold on;
+    %for i = 1:nBoxes
+    %    rectangle('Position', boxes(i, :), 'EdgeColor','r');
+    %    [nHeads, ~] = size(headCentroids{i});
+    %    
+    %    for j = 1:nHeads
+    %        
+    %        x = headCentroids{i}(j, 1);
+    %        y = headCentroids{i}(j, 2);
+    %        plot(x, y,'g.');
+    %    end
+    %end
 %         
 %     
 %

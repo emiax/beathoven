@@ -12,9 +12,9 @@ function values = noteValue( flagPositions, img, lineDist)
     img = max(zeros(height, width), img);
     img = img/max(max(img));
     
-    figure(); 
-    imshow(img);
-    hold on;
+    %figure(); 
+    %imshow(img);
+    %hold on;
     
     for i = 1:h
        y1 = round(max(flagPositions(i,1), 1));
@@ -49,10 +49,10 @@ function values = noteValue( flagPositions, img, lineDist)
         nFlags = max(length(leftLocs), length(rightLocs));
         if (nFlags == 1)
             values(i) = 8;
-            plot((x1+x2)/2, (y1+y2)/2, 'gx') ;
+            %plot((x1+x2)/2, (y1+y2)/2, 'gx') ;
         elseif(nFlags == 2)
             values(i) = 16;
-            plot((x1+x2)/2, (y1+y2)/2, 'rx') ;
+            %plot((x1+x2)/2, (y1+y2)/2, 'rx') ;
         else
             values(i) = 4;
         end
