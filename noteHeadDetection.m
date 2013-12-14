@@ -13,7 +13,7 @@ function [ noteHeads ] = noteHeadDetection( imgNoLines, lines)
     strClose = imrotate(strClose, 45, 'bilinear');
     
     %Element for opening
-    strOpen = strel('ball', round(lineDist/3), 1, 2);
+    strOpen = strel('ball', round(lineDist/2), 1, 2);
     strOpen = strOpen.getnhood.*strOpen.getheight;
     strOpen = imresize(strOpen, 'Scale', [1,1.2]);
     strOpen = imrotate(strOpen, 45, 'bilinear');

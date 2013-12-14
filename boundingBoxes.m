@@ -1,4 +1,4 @@
-function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lineDist)
+function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lineDist, staffImg, topLine, bottomLine)
   both = (stems + heads) > 0;
     both = imdilate(both, ones(round(lineDist*1/3)));
 
@@ -7,8 +7,12 @@ function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lin
     categorization = zeros(h, w, 3);
     categorization(:, :, 1) = heads;
     categorization(:, :, 2) = stems;
-    categorization(:, :, 3) = both;
+    categorization(:, :, 3) = 1-staffImg;
     
+    
+    %figure();
+    %imshow(categorization);
+    %hold on;
       
     labels = bwlabel(both, 8);
     boxesStruct = regionprops(labels, 'BoundingBox');
@@ -42,7 +46,7 @@ function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lin
         
         localHeads = heads(y:y2,x:x2);
         headLabels = bwlabel(localHeads);
-        headCentroidsStruct = regionprops(headLabels, 'Centroid', 'Area');
+        headCentroidsStruct = regionprops(headLabels, 'Centroid', 'Area', 'BoundingBox');
 
         nHeads = numel(headCentroidsStruct);
          
@@ -54,11 +58,25 @@ function [boxes, headCentroids, flagPositions] = boundingBoxes(stems, heads, lin
            hb = headCentroidsStruct(j).Centroid;
            ha = headCentroidsStruct(j).Area;
            
-           headX = x+hb(1)-1;
-           headY = y+hb(2)-1;
+           hbb = headCentroidsStruct(j).BoundingBox;
+           
+           %plot(x + [hbb(1) hbb(3)], y + [hbb(2) hbb(4)], 'r');
+           
+           headX = x+hb(1);
+           headY = y+hb(2);
+           
+           %plot(headX, headY, 'gx');
+           %plot(headX, topLine, 'rx');
+           %plot(headX, bottomLine, 'mx');
+           
+           %headX = x+hbb(1)+hbb(3)/2;
+           %headY = y+hbb(2)+hbb(4)/2;
+           
            headArea = y+ha;
            
            ratio = (headY - y) / (y2 - y);
+           
+           
            
            if (ratio > 3/4)
                foundInBottom(end + 1) = j;

@@ -1,10 +1,11 @@
 clear all;
 close all;
 
-%images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
+images = {'im1s';'im3s'; 'im5s'; 'im6s'; 'im8s'; 'im9s'; 'im10s'; 'im13s'};
 %images = {'im1s';'im3s'; 'im5s'; 'im6s'};
 
-images = {'im1s'};
+%images = {'im1s'; 'im3s'};
+%images = {'im1s'};
 
 path = 'samples/';
 suffix = '.jpg';
@@ -51,6 +52,10 @@ for i = 1:numImages
     %Straighten the image
     straightened = straighten(img);
     
+    figure();
+    imshow(straightened);
+    
+    
     % Show straightened image
         figure(h2);
         b = subplot(numGrid, numGrid, i);
@@ -68,8 +73,8 @@ for i = 1:numImages
     
     %Threshold the image
     imgThresh = thresh(straightened);
-    figure();
-    imshow(imgThresh);
+    %figure();
+    %imshow(imgThresh);
     
 
     %Uncomment to view lines
@@ -83,6 +88,10 @@ for i = 1:numImages
     
     imgThresh = horizontalCrop(imgThresh, lines);
 
+    
+    
+    
+    
     %for y = lines(:)
     %    plot([0, 1000], [y y], 'r');
     %end
@@ -98,6 +107,12 @@ for i = 1:numImages
    
     
     noLines = lineRemoval(straightened, lines);
+    
+    %figure();
+    %imshow(noLines);
+    %hold on;
+    %plot([0 1000], [lines(1,1) lines(1,1)], 'r');
+    
     figure(h4);
     b = subplot(numGrid, numGrid, i);
     imshow(noLines);
@@ -112,12 +127,15 @@ for i = 1:numImages
     for j = 1:nStaffs 
         
         staffImg = noLines(staffs(j, 1):staffs(j, 2),:);
+        staffImgWithLines = imgThresh(staffs(j, 1):staffs(j, 2),:);
         [stems, heads, misc] = categorize(staffImg, lines);
-        [boxes, heads, flagPositions] = boundingBoxes(stems, heads, lineDist(lines));
+
+        topLine = lines(j, 1) - staffs(j, 1) + 1;
+        bottomLine = lines(j, 5) - staffs(j, 1) + 1;
         
-        topLine = lines(j, 1) - staffs(j, 1);
-        bottomLine = lines(j, 5) - staffs(j, 1);
+        [boxes, heads, flagPositions] = boundingBoxes(stems, heads, lineDist(lines), staffImgWithLines, topLine, bottomLine);
         
+
         
         
         [nBoxes, ~] = size(boxes);
@@ -148,11 +166,12 @@ for i = 1:numImages
     referenceIndex = find(ismember(referenceNames, imageName));
     
     if (referenceIndex) 
-       ref = referenceStrings(referenceIndex);
-       d = strdist(char(ref), outputString);
+       ref = char(referenceStrings(referenceIndex));
+       d = strdist(ref, outputString);
        failRate = double(d)/double(length(char(ref)));
        fprintf('%s %d %#5.0f \n', char(imageName), d, failRate*100);
-       
+       ref
+       outputString
     end
     
     

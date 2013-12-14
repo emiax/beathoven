@@ -6,9 +6,7 @@ function [ stems, heads, misc ] = categoirze( imageNoLines, lines )
     %only heads
     headsImage = noteHeadDetection(imageNoLines, lines);
     
-    
- 
-    
+        
     %thresh heads
     heads = 1 - headsImage;
     threshold = graythresh(heads);
@@ -35,5 +33,14 @@ function [ stems, heads, misc ] = categoirze( imageNoLines, lines )
    
         
     misc = (1 - imageNoLines) - (1 - stemsImage) - (1 - headsImage);
+    
+    
+    %[h, w] = size(imageNoLines);
+    %rgbImg = zeros(h, w, 3);
+    %rgbImg(:,:,1) = stems;
+    %rgbImg(:,:,2) = heads;
+    %rgbImg(:,:,3) = misc;
+    %figure();
+    %imshow(rgbImg);
     
 end
