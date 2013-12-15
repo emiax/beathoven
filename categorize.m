@@ -20,12 +20,14 @@ function [ stems, heads, misc ] = categoirze( imageNoLines, lines )
     
     
     thinStems = bwmorph(stems, 'thin');
-    bottoms = bwhitmiss(thinStems, [0 0 0; 0 1 0; -1 -1 -1]);
-    tops = bwhitmiss(thinStems, [-1 -1 -1; 0 1 0; 0 0 0]);
-    bottomsAndTops = (bottoms + tops) > 0;
+    %bottoms = bwhitmiss(thinStems, [0 0 0; 0 1 0; -1 -1 -1]);
+    %tops = bwhitmiss(thinStems, [-1 -1 -1; 0 1 0; 0 0 0]);
+    %bottomsAndTops = (bottoms + tops) > 0;
     
     lineDist = mean(mean(lines(:,2:5) - lines(:, 1:4)));
-    areas = bwdist(bottomsAndTops) < lineDist*(2/3);
+    %areas = bwdist(bottomsAndTops) < lineDist*(2/3);
+    
+    areas = bwdist(thinStems) < lineDist*(2/3);
     
     areas = (areas + heads) > 1;
     

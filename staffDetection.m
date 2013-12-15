@@ -15,11 +15,11 @@ function staffs = staffDetection(input)
     projectedDerivative = horProj(derivative);
     projectedInput = horProj(input == 0);
     
-    figure(); hold on;
-    plot(projectedInput, 'b');
-    plot(7*projectedDerivative, 'k');
+    %figure(); hold on;
+    %plot(projectedInput, 'b');
+    %plot(7*projectedDerivative, 'k');
     linePoints = max(projectedInput-10*projectedDerivative, 0);
-    plot(linePoints, 'r');
+    %plot(linePoints, 'r');
     
     [peaks, locations] = findpeaks(linePoints, 'MINPEAKHEIGHT', 0.1, 'MINPEAKDISTANCE', 2);
     
