@@ -39,12 +39,12 @@ function [ stems, heads, misc ] = categoirze( imageNoLines, lines )
     
     
     
-    [h, w] = size(imageNoLines);
-    rgbImg = zeros(h, w, 3);
-    rgbImg(:,:,1) = stems;
-    rgbImg(:,:,2) = heads;
-    rgbImg(:,:,3) = misc;
-    figure();
-    imshow(rgbImg);
+    %[h, w] = size(imageNoLines);
+    %rgbImg = zeros(h, w, 3);
+    %rgbImg(:,:,1) = stems;
+    %rgbImg(:,:,2) = heads;
+    %rgbImg(:,:,3) = misc;
+    %figure();
+    %imshow(rgbImg);
     
 end
