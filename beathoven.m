@@ -15,10 +15,6 @@ function strout = beathoven(img)
     lines = staffDetection(imgThresh);
    
 
-    %Uncomment to see staffs seperated
-    staffBounds = staffBox(imgThresh, lines);
-
-        
     noLines = lineRemoval(straightened, lines);
     
 
