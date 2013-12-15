@@ -15,18 +15,17 @@ numGrid = ceil(sqrt(numImages));
 
 [referenceNames, referenceStrings] = textread(strcat(path, 'reference.txt'),'%q %q\n');
 
+%h1 = figure(1);
+%set(1, 'name', 'Original Images');
+%h2 = figure(2);
+%set(2, 'name', 'Straightened');
+%h3 = figure(3);
+%set(3, 'name', 'Uniform Illumination');
 
-h1 = figure(1);
-set(1, 'name', 'Original Images');
-h2 = figure(2);
-set(2, 'name', 'Straightened');
-h3 = figure(3);
-set(3, 'name', 'Uniform Illumination');
-
-h4 = figure(4);
-set(4, 'name', 'No lines');
-h5 = figure(5);
-set(5, 'name', 'Stems, flags, heads');
+%h4 = figure(4);
+%set(4, 'name', 'No lines');
+%h5 = figure(5);
+%set(5, 'name', 'Stems, flags, heads');
 
 % h3 = figure(3);
 % set(3, 'name', 'Threshold');
@@ -43,30 +42,37 @@ for i = 1:numImages
     fileString = char(strcat(path,images{i},suffix));
     img = im2double(imread(fileString));
     
+    
+    img = illumination(img);
+    %img = perspectiveCorrection(img);
+    
+   
+
+    
     % Show original image
-        figure(h1);
-        a = subplot(numGrid, numGrid, i);
-        imshow(img);
-        title(a, fileString);
+        %figure(h1);
+        %a = subplot(numGrid, numGrid, i);
+        %imshow(img);
+        %title(a, fileString);
     
     %Straighten the image
     straightened = straighten(img);
     
     
     % Show straightened image
-        figure(h2);
-        b = subplot(numGrid, numGrid, i);
-        imshow(straightened);
-        title(b, fileString);
+        %figure(h2);
+        %b = subplot(numGrid, numGrid, i);
+        %imshow(straightened);
+        %title(b, fileString);
         
     % Uniform illumination
-    illuminated = illumination(straightened);
+    %illuminated = illumination(straightened);
     
     % Show uniformed illumination
-        figure(h3);
-        c = subplot(numGrid, numGrid, i);
-        imshow(illuminated);
-        title(c, fileString);
+    %    figure(h3);
+    %    c = subplot(numGrid, numGrid, i);
+    %    imshow(illuminated);
+    %    title(c, fileString);
     
     %Threshold the image
     imgThresh = thresh(straightened);
@@ -84,10 +90,11 @@ for i = 1:numImages
     lines = staffDetection(imgThresh);
    
     
-    imgThresh = horizontalCrop(imgThresh, lines);
+    
+    %imgThresh = horizontalCrop(imgThresh, lines);
 
-    
-    
+    %figure();
+    %imshow(imgThresh);
     
     
     %for y = lines(:)
@@ -100,10 +107,12 @@ for i = 1:numImages
     %    figure()
     %    imshow(imgThresh(staffBounds(j,1):staffBounds(j,2),:))
     %end
-    
+    %staffBounds
         %Plot for debugging purposes:
    
-    
+    %straightened = straightened*1.4;
+    %straightened(:) = min(straightened(:), 1);
+        
     noLines = lineRemoval(straightened, lines);
     
     %figure();
@@ -111,15 +120,16 @@ for i = 1:numImages
     %hold on;
     %plot([0 1000], [lines(1,1) lines(1,1)], 'r');
     
-    figure(h4);
-    b = subplot(numGrid, numGrid, i);
-    imshow(noLines);
-    title(b, fileString);
+    %figure(h4);
+    %b = subplot(numGrid, numGrid, i);
+    %imshow(noLines);
+    %title(b, fileString);
     
 
     staffs = staffBox(imgThresh, lines);
     [nStaffs, ~] = size(staffs);
     
+     
     outputString = '';   
 
     for j = 1:nStaffs 
@@ -128,6 +138,8 @@ for i = 1:numImages
         staffImgWithLines = imgThresh(staffs(j, 1):staffs(j, 2),:);
         [stems, heads, misc] = categorize(staffImg, lines);
 
+        
+        
         topLine = lines(j, 1) - staffs(j, 1) + 1;
         bottomLine = lines(j, 5) - staffs(j, 1) + 1;
         
@@ -161,85 +173,25 @@ for i = 1:numImages
     end
         
     imageName = images(i);
-    referenceIndex = find(ismember(referenceNames, imageName));
+    imageReferenceName = imageName(1:end-1);
     
+    referenceIndex = 0;
+    for j = 1:numel(referenceNames)
+        chName = char(imageName);
+        if (strcmp(char(referenceNames(j)), chName(1:end-1)))
+            referenceIndex = j;
+        end
+    end
+   
     if (referenceIndex) 
-       ref = char(referenceStrings(referenceIndex));
-       d = strdist(ref, outputString);
+       ref = referenceStrings(referenceIndex);
+       d = strdist(char(ref), outputString);
        failRate = double(d)/double(length(char(ref)));
        fprintf('%s %d %#5.0f \n', char(imageName), d, failRate*100);
-       ref
-       outputString
+       fprintf('ref: %s\n', char(ref));
+       fprintf('out: %s\n', char(outputString)); 
     end
     
-    
-    
-    %title(b, fileString);
-
-    %Threshold the image
-    imgThresh = thresh(illuminated);
-    %figure();
-    %imshow(imgThresh);
-    
-%     %Uncomment to view lines
-%     %figure(h3);
-%     %c = subplot(numGrid, numGrid, i);
-%     %imshow(imgThresh);
-%     %hold on;
-%     %title(c, fileString);
-%     %Gets the staffs
-%     lines = staffDetection(imgThresh);
-%     
-%     imgThresh = horizontalCrop(imgThresh, lines);
-% 
-%     %for y = lines(:)
-%     %    plot([0, 1000], [y y], 'r');
-%     %end
-%     
-%     %Uncomment to see staffs seperated
-%     staffBounds = staffBox(imgThresh, lines);
-%         %for j = 1:size(lines,1)        
-%     %    figure()
-%     %    imshow(imgThresh(staffBounds(j,1):staffBounds(j,2),:))
-%     %end
-%     
-%         %Plot for debugging purposes:
-%     
-%     
-%     
-%     
-%     noLines = lineRemoval(straightened, lines);
-%     figure(h4);
-%     b = subplot(numGrid, numGrid, i);
-%     imshow(noLines);
-%     title(b, fileString);
-%     
-%     
-%     stemsImage = stemDetection(noLines, lines);
-%     figure(h5);
-%     b = subplot(numGrid, numGrid, i);
-%     imshow(stemsImage);
-%     title(b, fileString);
-
-    
-    
    
-   % hold on;
-    % 
-  %  for y = lines(:)
-  %      plot([0, 1000], [y y], 'r');
-  %  end
-
-    %imshow(noLines);
-    %imgNoLines = thresh(imgNoLines);
-  
-    
-
-    %figure()
-    %imshow(noLines);
-    %imgNoLines = thresh(imgNoLines);
-  
-    %noteDetection(noLines, staffBounds, lines);
-
     
 end

@@ -1,7 +1,7 @@
 function [ outputImage ] = straighten( inputImage )
     %Converts input to edges (I.E, binary)
-    I = rgb2gray(inputImage);
-    BW = edge(I, 'canny');
+    %I = rgb2gray(inputImage);
+    BW = edge(inputImage, 'canny');
 
     
     BW = BW';

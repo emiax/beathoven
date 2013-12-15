@@ -1,6 +1,6 @@
 function outputImage = lineRemoval(image, staffs)
     %outputImage = 1 - image;
-    image = rgb2gray(1 - image);
+    image = 1 - image;
     dimage = image;
     lines = image;
     

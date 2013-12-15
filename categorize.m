@@ -1,6 +1,7 @@
 function [ stems, heads, misc ] = categoirze( imageNoLines, lines ) 
 
-%only stems
+    
+    %only stems
     stemsImage = stemDetection(imageNoLines, lines);
     
     %only heads
@@ -33,14 +34,17 @@ function [ stems, heads, misc ] = categoirze( imageNoLines, lines )
    
         
     misc = (1 - imageNoLines) - (1 - stemsImage) - (1 - headsImage);
+    %misc = ( 1 - imageNoLines - stems - heads); % stemsImage + headsImage - 1 - imageNoLines;
     
     
-    %[h, w] = size(imageNoLines);
-    %rgbImg = zeros(h, w, 3);
-    %rgbImg(:,:,1) = stems;
-    %rgbImg(:,:,2) = heads;
-    %rgbImg(:,:,3) = misc;
-    %figure();
-    %imshow(rgbImg);
+    
+    
+    [h, w] = size(imageNoLines);
+    rgbImg = zeros(h, w, 3);
+    rgbImg(:,:,1) = stems;
+    rgbImg(:,:,2) = heads;
+    rgbImg(:,:,3) = misc;
+    figure();
+    imshow(rgbImg);
     
 end
