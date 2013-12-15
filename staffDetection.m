@@ -6,6 +6,8 @@ function staffs = staffDetection(input)
 
     input = bwmorph(input,'erode');
 
+    
+    
     f = [-1 0 1];
     derivative = abs(imfilter(input,f,'circular'));
     
@@ -13,10 +15,11 @@ function staffs = staffDetection(input)
     projectedDerivative = horProj(derivative);
     projectedInput = horProj(input == 0);
     
-    
-    
+    figure(); hold on;
+    plot(projectedInput, 'b');
+    plot(7*projectedDerivative, 'k');
     linePoints = max(projectedInput-10*projectedDerivative, 0);
-    %figure(); plot(linePoints);
+    plot(linePoints, 'r');
     
     [peaks, locations] = findpeaks(linePoints, 'MINPEAKHEIGHT', 0.1, 'MINPEAKDISTANCE', 2);
     
@@ -36,9 +39,7 @@ function staffs = staffDetection(input)
         % calculate product of all five line points
         weights(i) = prod(peaks(i:i+4));
         
-        
-        
-        
+                
         % sum of difference cannot be smaller than 10 pixels.
         % TODO: weight on image size.
         
